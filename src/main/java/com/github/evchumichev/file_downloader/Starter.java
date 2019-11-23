@@ -4,6 +4,6 @@ import com.github.evchumichev.file_downloader.services.DownloadThreadStarter;
 
 public class Starter {
     public static void main(String[] args) {
-        new DownloadThreadStarter().start();
+        new DownloadThreadStarter(args).start();
     }
 }

@@ -1,16 +1,30 @@
 package com.github.evchumichev.file_downloader.services;
 
 
+import com.github.evchumichev.file_downloader.domains.ParametersDTO;
+
+import java.util.List;
+
 public class DownloadThreadStarter {
 
+    private ParametersParser parametersParser;
+    String[] args;
+
+    public DownloadThreadStarter(String[] args) {
+        parametersParser = new ParametersParser();
+        this.args = args;
+    }
+
     public void start() {
-        String url = "https://upload.wikimedia.org/wikipedia/ru/thumb/3/39/Java_logo.svg/1200px-Java_logo.svg.png";
-        String path = "";
         try {
-            new Thread(new HTTPDownloader(url, path)).start();
+            ParametersDTO parameters = parametersParser.prepare(args);
+            List<String> urls = parameters.getUrls();
+            String filePath = parameters.getFilePath();
+            for (String url : urls) {
+                new Thread(new HTTPDownloader(url, filePath)).start();
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
-
     }
 }
