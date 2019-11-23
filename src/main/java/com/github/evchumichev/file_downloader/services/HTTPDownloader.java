@@ -1,17 +1,37 @@
 package com.github.evchumichev.file_downloader.services;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 
 
-public class Downloader {
+public class HTTPDownloader implements Runnable {
+    private FileCreator fileCreator;
+    private String fileURL;
+    private String filePath;
+    private URLConnection connection;
 
-    public void downloadFile(String url, String path) {
+    public HTTPDownloader(String url, String path) {
+        fileURL = url;
+        filePath = path;
+        fileCreator = FileCreator.getInstance();
+    }
+
+    @Override
+    public void run() {
+        downloadFile();
+    }
+
+    private void downloadFile() {
         try {
-            File file = new File(path);
-            file.mkdirs();
-            file.createNewFile();
-            try (BufferedInputStream stream = new BufferedInputStream(new URL(url).openStream());
+            URL url = new URL(fileURL);
+            connection = url.openConnection();
+            File file = fileCreator.create(connection, filePath);
+            System.out.println(file.getAbsolutePath());
+            try (BufferedInputStream stream = new BufferedInputStream(connection.getInputStream());
                  FileOutputStream fileOutputStream = new FileOutputStream(file)) {
                 byte[] dataBuffer = new byte[1024];
                 int bytes;
@@ -19,10 +39,9 @@ public class Downloader {
                     fileOutputStream.write(dataBuffer, 0, bytes);
                 }
             }
-        } catch (IOException e) {
+
+        } catch (IOException | RuntimeException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }
