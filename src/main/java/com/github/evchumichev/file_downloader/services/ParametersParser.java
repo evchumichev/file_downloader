@@ -15,7 +15,7 @@ public class ParametersParser {
             }
             if (s.contains("folder")) {
                 if (filePath != null) {
-                    throw new RuntimeException("Your input parameters contain more then one value!");
+                    throw new RuntimeException("Your input parameters contain more then one folder value!");
                 }
                 filePath = s.split("=")[1];
                 continue;
