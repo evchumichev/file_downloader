@@ -10,6 +10,9 @@ public class ParametersParser {
         String filePath = null;
         for (String s : args) {
             if (s.contains("url")) {
+                if (s.charAt(s.length() - 1) == '=') {
+                    throw new RuntimeException("URL has empty parameter!");
+                }
                 urls.add(s.split("=")[1]);
                 continue;
             }
@@ -17,7 +20,12 @@ public class ParametersParser {
                 if (filePath != null) {
                     throw new RuntimeException("Your input parameters contain more then one folder value!");
                 }
+                if (s.charAt(s.length() - 1) == '=') {
+                    filePath = "";
+                    continue;
+                }
                 filePath = s.split("=")[1];
+                System.out.println(filePath);
                 continue;
             }
             throw new RuntimeException(String.format("Incorrect input of parameter: %s", s));
@@ -28,6 +36,6 @@ public class ParametersParser {
         if (filePath == null) {
             throw new RuntimeException("Parameters does not contain save folder!");
         }
-        return new ParametersDTO(urls,filePath);
+        return new ParametersDTO(urls, filePath);
     }
 }
