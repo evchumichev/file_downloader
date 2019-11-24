@@ -1,9 +1,9 @@
 package com.github.evchumichev.file_downloader;
 
-import com.github.evchumichev.file_downloader.services.DownloadThreadStarter;
+import com.github.evchumichev.file_downloader.services.DownloadPreparator;
 
 public class Starter {
     public static void main(String[] args) {
-        new DownloadThreadStarter(args).start();
+        new DownloadPreparator(args).start();
     }
 }

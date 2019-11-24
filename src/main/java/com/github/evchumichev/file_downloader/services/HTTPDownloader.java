@@ -27,10 +27,8 @@ public class HTTPDownloader implements Runnable {
 
     private void downloadFile() {
         try {
-            URL url = new URL(fileURL);
-            connection = url.openConnection();
-            File file = fileCreator.create(connection, filePath);
-            System.out.println(file.getAbsolutePath());
+            File file = fileCreator.create(fileURL, filePath);
+            connection = new URL(fileURL).openConnection();
             try (BufferedInputStream stream = new BufferedInputStream(connection.getInputStream());
                  FileOutputStream fileOutputStream = new FileOutputStream(file)) {
                 byte[] dataBuffer = new byte[1024];
@@ -41,7 +39,7 @@ public class HTTPDownloader implements Runnable {
             }
 
         } catch (IOException | RuntimeException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
     }
 }

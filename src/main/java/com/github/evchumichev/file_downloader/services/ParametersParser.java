@@ -25,7 +25,6 @@ public class ParametersParser {
                     continue;
                 }
                 filePath = s.split("=")[1];
-                System.out.println(filePath);
                 continue;
             }
             throw new RuntimeException(String.format("Incorrect input of parameter: %s", s));
